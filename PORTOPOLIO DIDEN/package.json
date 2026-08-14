@@ -1,0 +1,10 @@
+﻿{
+  "name": "portfolio-diden",
+  "version": "1.0.0",
+  "description": "Personal portfolio website with contact form and GitHub integration",
+  "main": "server.py",
+  "scripts": {
+    "start": "python server.py",
+    "dev": "python server.py"
+  }
+}
