@@ -2,9 +2,13 @@
   "name": "portfolio-diden",
   "version": "1.0.0",
   "description": "Personal portfolio website with contact form and GitHub integration",
-  "main": "server.py",
+  "main": "server.js",
   "scripts": {
-    "start": "python server.py",
-    "dev": "python server.py"
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "nodemailer": "^6.9.13"
   }
 }
