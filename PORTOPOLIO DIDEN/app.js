@@ -139,7 +139,18 @@ contactForm?.addEventListener('submit', async (event) => {
       body: JSON.stringify(payload)
     });
 
-    const result = await response.json();
+    let result = {};
+    const contentType = response.headers.get('content-type') || '';
+
+    if (contentType.includes('application/json')) {
+      result = await response.json();
+    } else if (!response.ok) {
+      throw new Error(
+        response.status === 404
+          ? 'API kontak belum aktif. Pastikan folder api/ sudah di-deploy di Vercel.'
+          : 'Gagal mengirim pesan. Server tidak merespons dengan benar.'
+      );
+    }
 
     if (!response.ok) {
       throw new Error(result.message || 'Gagal mengirim pesan.');

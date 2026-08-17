@@ -1,49 +1,56 @@
 Portfolio server
 
-This repository contains a simple Node.js/Express portfolio server that serves a static HTML site and provides two API endpoints:
+This repository contains a simple Node.js portfolio site with Vercel serverless API routes.
 
-- GET /api/github — fetches GitHub profile + repos for the configured username (GITHUB_USERNAME env or default in code)
-- POST /api/contact — contact form endpoint which validates input and (optionally) sends email via Gmail using nodemailer when GMAIL_USER and GMAIL_APP_PASSWORD are set
+API endpoints (must live in `api/` folder):
+- GET /api/health — health check
+- GET /api/github — fetches GitHub profile + repos
+- POST /api/contact — contact form (sends email via Gmail when configured)
 
 Requirements
 - Node.js 18+ and npm
 
-Setup
-1. Install Node.js (LTS 18+): https://nodejs.org/
-2. In the project folder, install dependencies:
+Setup (local)
+1. Install dependencies:
 
    npm install
 
-3. Create a .env file in the project root with any of the following variables as needed:
+2. Create a `.env` file:
 
    PORT=3000
    GITHUB_USERNAME=heauriee6367-spec
-   GMAIL_USER=youremail@gmail.com
-   GMAIL_APP_PASSWORD=your_app_password  # or an app password
-   CONTACT_TO_EMAIL=yourdest@example.com
+   GMAIL_USER=your-gmail@gmail.com
+   GMAIL_APP_PASSWORD=your-16-char-app-password
+   CONTACT_TO_EMAIL=diden6367@gmail.com
 
-Run locally
+3. Run locally:
 
    npm start
 
-The server will start at http://localhost:3000 and serve the static site index.html.
+Deploy on Vercel
+1. In Vercel project settings, set **Root Directory** to `PORTOPOLIO DIDEN`.
+2. Ensure API files are in `PORTOPOLIO DIDEN/api/` (not at project root).
+3. Add these **Environment Variables** in Vercel → Settings → Environment Variables:
 
-Testing the endpoints (example curl)
+   | Variable | Value |
+   |----------|-------|
+   | GMAIL_USER | your Gmail address |
+   | GMAIL_APP_PASSWORD | Gmail App Password (16 chars) |
+   | CONTACT_TO_EMAIL | diden6367@gmail.com |
+   | GITHUB_USERNAME | heauriee6367-spec |
 
-Health check:
+4. Gmail App Password setup:
+   - Enable 2-Step Verification on your Google account
+   - Go to https://myaccount.google.com/apppasswords
+   - Create an app password for "Mail"
+   - Use that 16-character password as GMAIL_APP_PASSWORD (not your regular Gmail password)
 
-   curl http://localhost:3000/health
+5. Redeploy after adding env vars.
 
-Fetch GitHub (replace username if using different env):
+6. Test endpoints:
+   - https://your-site.vercel.app/api/health
+   - https://your-site.vercel.app/api/github
 
-   curl http://localhost:3000/api/github
-
-Contact form (example):
-
-   curl -X POST http://localhost:3000/api/contact \
-     -H "Content-Type: application/json" \
-     -d '{"name":"Tester","email":"test@example.com","subject":"Hello","message":"This is a test"}'
-
-Notes
-- The contact endpoint will return an error if GMAIL_USER/GMAIL_APP_PASSWORD are not configured. For development you can inspect server logs and index.html form which submits to /api/contact.
-- The server uses node's global fetch API; Node 18+ is recommended.
+Important
+- Do NOT put `contact.js`, `github.js`, or `health.js` at the project root. They must be inside the `api/` folder for Vercel to recognize them.
+- If `/api/contact` returns 404, the `api/` folder structure is wrong or Root Directory is misconfigured.
